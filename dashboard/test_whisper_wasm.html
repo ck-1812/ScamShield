@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Whisper WASM Transcription Test</title>
+  <script src="/coi-serviceworker.js"></script>
+</head>
+<body>
+  <h1>Whisper WASM Transcription Test</h1>
+  <div id="status">Testing environment...</div>
+  <pre id="log"></pre>
+
+  <script>
+    function log(msg) {
+      document.getElementById('log').textContent += msg + '\n';
+      console.log(msg);
+    }
+
+    function parseWavToFloat32(arrayBuffer) {
+      const view = new DataView(arrayBuffer);
+      let offset = 12;
+      while (offset < view.byteLength) {
+        const chunkId = String.fromCharCode(view.getUint8(offset), view.getUint8(offset+1), view.getUint8(offset+2), view.getUint8(offset+3));
+        const chunkSize = view.getUint32(offset + 4, true);
+        if (chunkId === 'data') {
+          const dataOffset = offset + 8;
+          const numSamples = chunkSize / 2;
+          const float32 = new Float32Array(numSamples);
+          for (let i = 0; i < numSamples; i++) {
+            float32[i] = view.getInt16(dataOffset + i * 2, true) / 32768.0;
+          }
+          return float32;
+        }
+        offset += 8 + chunkSize;
+      }
+      throw new Error('No data chunk found in WAV');
+    }
+
+    let transcriptSegments = [];
+
+    window.Module = {
+      print: function(text) {
+        log('STDOUT: ' + text);
+        const match = text.match(/\[\d\d:\d\d:\d\d\.\d\d\d\s*-->\s*\d\d:\d\d:\d\d\.\d\d\d\]\s*(.*)/);
+        if (match && match[1]) {
+          transcriptSegments.push(match[1].trim());
+          document.getElementById('status').textContent = 'TRANSCRIPT: ' + transcriptSegments.join(' ');
+        }
+      },
+      printErr: function(text) {
+        log('STDERR: ' + text);
+      },
+      onRuntimeInitialized: async function() {
+        log('Whisper WASM runtime initialized!');
+        document.getElementById('status').textContent = 'Loading model...';
+        
+        try {
+          const resp = await fetch('/whisper/ggml-tiny-q5_1.bin');
+          const buf = await resp.arrayBuffer();
+          Module.FS_createDataFile('/', 'whisper.bin', new Uint8Array(buf), true, true);
+          
+          const instance = Module.init('whisper.bin');
+          log('Instance created: ' + instance);
+
+          log('Fetching /audio/caller_01.wav...');
+          const audioResp = await fetch('/audio/caller_01.wav');
+          const audioBuf = await audioResp.arrayBuffer();
+          
+          const pcmFloat32 = parseWavToFloat32(audioBuf);
+          log('Decoded WAV: ' + pcmFloat32.length + ' samples (' + (pcmFloat32.length / 16000).toFixed(1) + 's)');
+
+          document.getElementById('status').textContent = 'Transcribing caller_01.wav...';
+          const t0 = performance.now();
+          
+          const ret = Module.full_default(instance, pcmFloat32, 'en', 4, false);
+          const dt = ((performance.now() - t0) / 1000).toFixed(2);
+          log('Module.full_default returned: ' + ret + ' in ' + dt + 's');
+          
+          // Poll for completion
+          let checks = 0;
+          const checkInterval = setInterval(() => {
+            checks++;
+            if (transcriptSegments.length > 0 || checks > 10) {
+              clearInterval(checkInterval);
+              log('Final transcription: ' + transcriptSegments.join(' '));
+              document.getElementById('status').textContent = 'DONE: ' + transcriptSegments.join(' ');
+            }
+          }, 1000);
+        } catch (e) {
+          log('Error: ' + e);
+          document.getElementById('status').textContent = 'Error: ' + e.message;
+        }
+      }
+    };
+  </script>
+  <script src="/whisper/whisper.cpp.wasm.js"></script>
+</body>
+</html>

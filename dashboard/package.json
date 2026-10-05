@@ -1,0 +1,13 @@
+{
+  "name": "scamshield-command-center",
+  "version": "1.0.0",
+  "description": "ScamShield Laptop Command Center Dashboard - Real-time privacy-first scam telemetry",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.2.0"
+  }
+}

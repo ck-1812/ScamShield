@@ -1,0 +1,62 @@
+{
+  "scenarioId": "fake_police_hinglish",
+  "title": "Mumbai Police Fake Arrest Scam (Hindi / Hinglish)",
+  "description": "Simulates a Hindi/Hinglish speaking scammer impersonating Mumbai Police Crime Branch threatening digital arrest and demanding UPI payment.",
+  "category": "DIGITAL_ARREST",
+  "turns": [
+    {
+      "step": 1,
+      "speaker": "Caller (Scammer)",
+      "text": "Namaste, main Mumbai Crime Branch se Senior Inspector Sharma bol raha hoon.",
+      "expectedSignals": ["AUTHORITY_IMPERSONATION"],
+      "expectedRiskThreshold": "LOW",
+      "expectedMinScore": 15,
+      "delayMs": 2000
+    },
+    {
+      "step": 2,
+      "speaker": "Caller (Scammer)",
+      "text": "Aapke Aadhaar card aur PAN card se ek bank account khola gaya hai jisme illegal transactions paye gaye hain.",
+      "expectedSignals": ["IDENTITY_DOCUMENT_THREAT"],
+      "expectedRiskThreshold": "SUSPICIOUS",
+      "expectedMinScore": 32,
+      "delayMs": 2500
+    },
+    {
+      "step": 3,
+      "speaker": "Caller (Scammer)",
+      "text": "Court ne aapke khilaf arrest warrant jari kiya hai. Aapko turant arrest kiya jayega.",
+      "expectedSignals": ["LEGAL_THREAT", "URGENCY"],
+      "expectedRiskThreshold": "SUSPICIOUS",
+      "expectedMinScore": 55,
+      "delayMs": 2500
+    },
+    {
+      "step": 4,
+      "speaker": "Caller (Scammer)",
+      "text": "Yeh mamla secret hai. Kisi ko mat batana, apne parivar ko bhi nahi.",
+      "expectedSignals": ["SECRECY"],
+      "expectedRiskThreshold": "HIGH",
+      "expectedMinScore": 70,
+      "delayMs": 3000
+    },
+    {
+      "step": 5,
+      "speaker": "Caller (Scammer)",
+      "text": "Video call mat cut karna, camera on rakho.",
+      "expectedSignals": ["VIDEO_CONFINEMENT"],
+      "expectedRiskThreshold": "HIGH",
+      "expectedMinScore": 86,
+      "delayMs": 3000
+    },
+    {
+      "step": 6,
+      "speaker": "Caller (Scammer)",
+      "text": "Verification ke liye turant safe account mein paise transfer karo via UPI. Audit ke baad wapas aa jayenge.",
+      "expectedSignals": ["FINANCIAL_REQUEST", "SAFE_ACCOUNT_SCAM", "URGENCY"],
+      "expectedRiskThreshold": "CRITICAL",
+      "expectedMinScore": 95,
+      "delayMs": 3500
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "scenarioId": "bank_kyc_remote_access",
+  "title": "Bank Officer KYC Suspension & AnyDesk Scam",
+  "description": "Simulates a scammer posing as an SBI/HDFC bank manager claiming the victim's account is suspended unless they install AnyDesk and disclose OTP.",
+  "category": "BANK_FRAUD",
+  "turns": [
+    {
+      "step": 1,
+      "speaker": "Caller (Scammer)",
+      "text": "Good afternoon, I am calling from State Bank of India customer service head office.",
+      "expectedSignals": ["AUTHORITY_IMPERSONATION"],
+      "expectedRiskThreshold": "LOW",
+      "expectedMinScore": 15,
+      "delayMs": 2000
+    },
+    {
+      "step": 2,
+      "speaker": "Caller (Scammer)",
+      "text": "Your banking services and debit card will be permanently blocked within 1 hour due to pending KYC verification.",
+      "expectedSignals": ["URGENCY", "LEGAL_THREAT"],
+      "expectedRiskThreshold": "SUSPICIOUS",
+      "expectedMinScore": 30,
+      "delayMs": 2500
+    },
+    {
+      "step": 3,
+      "speaker": "Caller (Scammer)",
+      "text": "Please open Google Play Store and install AnyDesk or QuickSupport application right now so our executive can assist you.",
+      "expectedSignals": ["REMOTE_ACCESS_REQUEST"],
+      "expectedRiskThreshold": "HIGH",
+      "expectedMinScore": 60,
+      "delayMs": 2500
+    },
+    {
+      "step": 4,
+      "speaker": "Caller (Scammer)",
+      "text": "Share your 9 digit AnyDesk code. Now open your mobile banking app and enter your UPI PIN to approve the security certificate.",
+      "expectedSignals": ["CREDENTIAL_REQUEST", "REMOTE_ACCESS_REQUEST"],
+      "expectedRiskThreshold": "CRITICAL",
+      "expectedMinScore": 88,
+      "delayMs": 3000
+    },
+    {
+      "step": 5,
+      "speaker": "Caller (Scammer)",
+      "text": "A 6-digit OTP has been sent by the bank. Read the OTP aloud immediately to complete the unfreezing process.",
+      "expectedSignals": ["CREDENTIAL_REQUEST", "URGENCY"],
+      "expectedRiskThreshold": "CRITICAL",
+      "expectedMinScore": 98,
+      "delayMs": 3000
+    }
+  ]
+}

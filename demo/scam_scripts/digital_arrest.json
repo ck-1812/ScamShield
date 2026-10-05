@@ -1,0 +1,62 @@
+{
+  "scenarioId": "digital_arrest_cbi",
+  "title": "Digital Arrest Scam (Fake CBI Cyber Crime)",
+  "description": "Simulates the notorious Indian digital-arrest scam targeting victims with false accusations of illegal courier / money laundering and coercing them to stay on video call while transferring funds to a 'safe RBI account'.",
+  "category": "DIGITAL_ARREST",
+  "turns": [
+    {
+      "step": 1,
+      "speaker": "Caller (Scammer)",
+      "text": "Hello, I am Officer Vikram Singh calling from the CBI Cyber Crime Department, Headquarters New Delhi.",
+      "expectedSignals": ["AUTHORITY_IMPERSONATION"],
+      "expectedRiskThreshold": "LOW",
+      "expectedMinScore": 15,
+      "delayMs": 2000
+    },
+    {
+      "step": 2,
+      "speaker": "Caller (Scammer)",
+      "text": "Your Aadhaar card and mobile number have been linked to a 23 crore money laundering case and an illegal parcel intercepted at Mumbai customs.",
+      "expectedSignals": ["IDENTITY_DOCUMENT_THREAT"],
+      "expectedRiskThreshold": "SUSPICIOUS",
+      "expectedMinScore": 32,
+      "delayMs": 2500
+    },
+    {
+      "step": 3,
+      "speaker": "Caller (Scammer)",
+      "text": "A non-bailable arrest warrant has been issued against you under the Prevention of Money Laundering Act. Police will reach your residence within two hours.",
+      "expectedSignals": ["LEGAL_THREAT", "URGENCY"],
+      "expectedRiskThreshold": "SUSPICIOUS",
+      "expectedMinScore": 55,
+      "delayMs": 2500
+    },
+    {
+      "step": 4,
+      "speaker": "Caller (Scammer)",
+      "text": "This is a strictly confidential national security investigation. Do not tell your family members or discuss this with anyone, or they will be booked as co-conspirators.",
+      "expectedSignals": ["SECRECY"],
+      "expectedRiskThreshold": "HIGH",
+      "expectedMinScore": 70,
+      "delayMs": 3000
+    },
+    {
+      "step": 5,
+      "speaker": "Caller (Scammer)",
+      "text": "You are placed under digital custody. You must remain on this video call continuously. Do not disconnect the camera or look away from the screen.",
+      "expectedSignals": ["VIDEO_CONFINEMENT"],
+      "expectedRiskThreshold": "HIGH",
+      "expectedMinScore": 86,
+      "delayMs": 3000
+    },
+    {
+      "step": 6,
+      "speaker": "Caller (Scammer)",
+      "text": "To clear your name and obtain financial clearance from the Supreme Court, you must immediately transfer two lakh rupees to this safe RBI verification account. The amount is fully refundable after audit.",
+      "expectedSignals": ["FINANCIAL_REQUEST", "SAFE_ACCOUNT_SCAM", "URGENCY"],
+      "expectedRiskThreshold": "CRITICAL",
+      "expectedMinScore": 95,
+      "delayMs": 3500
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+# ============================================================
+# ScamShield .gitignore
+# ============================================================
+
+# ─── Large Binary Model Files ───────────────────────────────
+# These are too large for standard Git (>25 MB).
+# Download instructions are in models/README.md
+*.gguf
+*.bin
+*.pt
+*.onnx
+*.tflite
+*.weights
+
+# ─── Node / Vite (dashboard) ────────────────────────────────
+node_modules/
+dist/
+.vite/
+*.local
+
+# ─── Android / Gradle ───────────────────────────────────────
+android/.gradle/
+android/build/
+android/app/build/
+android/core/build/
+android/**/build/
+android/local.properties
+android/*.keystore
+android/*.jks
+*.apk
+*.aab
+*.dex
+
+# Gradle wrapper jars (large, re-downloadable)
+gradle-bin/
+
+# ─── IDE & Editor Files ─────────────────────────────────────
+.idea/
+*.iml
+.vscode/
+*.suo
+*.user
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ─── Environment / Secrets ──────────────────────────────────
+.env
+.env.*
+*.pem
+*.key
+*.cert
+*.p12
+secrets.json
+config.local.json
+
+# ─── OS Generated ───────────────────────────────────────────
+desktop.ini
+$RECYCLE.BIN/
+
+# ─── Test / Coverage Artifacts ──────────────────────────────
+coverage/
+.nyc_output/
+
+# ─── Logs ───────────────────────────────────────────────────
+*.log
+npm-debug.log*
+
+# ─── Whisper WASM build artifacts ───────────────────────────
+dashboard/public/whisper*.wasm
+dashboard/public/whisper*.js
+dashboard/public/whisper.cpp/
+
+# ─── Public audio blobs / generated audio ───────────────────
+# Committed WAV scenario files are intentionally kept.
+# Only exclude auto-generated or downloaded blobs:
+dashboard/public/*.blob
